@@ -29,8 +29,8 @@ module.exports = {
                 return await message.reply("I cannot modify this post as i don't have permission to do so!")
             }
             const user = message?.author || message?.user|| message?.member
-            const solvedTag = availableTags.find(t => t.name.toLowerCase() == 'solved')?.id
-            postMessage.setAppliedTags([solvedTag], 'Marked as solved By ' + user.username + '#' + user.discriminator)
+            const solvedTag = await availableTags.find(t => t.name.toLowerCase() == 'solved')?.id
+            await postMessage.setAppliedTags([solvedTag], 'Marked as solved By ' + user.username + '#' + user.discriminator)
             if (!message.channel.archived) {
             await message.reply({ embeds: [solvedEmbed] }).then(m => setTimeout(() => m.delete(), 1500)).then(async() => setTimeout(async() => await postMessage.setArchived(true, 'Marked as solved By ' + user.tag), 2000))
             

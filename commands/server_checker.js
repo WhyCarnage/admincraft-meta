@@ -80,6 +80,7 @@ module.exports = {
 				.setThumbnail(`https://api.mcsrvstat.us/icon/${ip}:${port}`)
 				.setAuthor({name: 'Server is Online', iconURL: 'https://mcsrvstat.us/img/minecraft.png'})
 				.setTimestamp()
+				.setAuthor({name: `${user.username}#${user.discriminator}`, iconURL: user.displayAvatarURL({ dynamic: true })})
 				.setFooter({text: 'Server Checker', iconURL: 'https://mcsrvstat.us/img/minecraft.png'});
 				if (json?.plugins) embed.addFields({ name: 'Plugins', value: `${json.plugins ? plugins : 'No plugins'}`, inline: true })
 				if (json?.mods) embed.addFields({ name: 'Mods', value: `${json.mods ? json.mods.name.join(', ') : 'No mods'}`, inline: true })
