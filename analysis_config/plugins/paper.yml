@@ -67,7 +67,7 @@ EntityTrackerFixer:
 Orebfuscator:
   prefix: "❌"
   value: |-
-    You don't need Orebfuscator as [Paper](https://gist.github.com/stonar96/ba18568bd91e5afd590e8038d14e245e) already has its features.
+    You don't need Orebfuscator as [Paper](https://docs.papermc.io/paper/anti-xray) already has its features.
 GroupManager:
   prefix: "❌"
   value: |-
@@ -88,14 +88,14 @@ PhantomSMP:
   - paper["world-settings"]["default"]["phantoms-only-attack-insomniacs"] == "false"
   prefix: "❌"
   value: |-
-    You probably don't need PhantomSMP as Paper already has its features.
+    You probably don't need PhantomSMP as Paper already has this [features](https://docs.papermc.io/paper/reference/world-configuration#phantoms-only-attack-insomniacs).
 - expressions:
   - paper["world-settings"]["default"]["phantoms-only-attack-insomniacs"] == "true"
   prefix: "❌"
   value: |-
-    You probably don't need PhantomSMP as Paper already has its features.
+    You probably don't need PhantomSMP as Paper already has this [feature](https://docs.papermc.io/paper/reference/world-configuration#phantoms-only-attack-insomniacs).
     Enable phantoms-only-attack-insomniacs in paper.yml.
 PacketLimiter:
   prefix: "❌"
   value: |-
-    You don't need PacketLimiter as Paper already has its features.
+    You don't need PacketLimiter as Paper already has this feature, [packet Limiter](https://docs.papermc.io/paper/reference/global-configuration#packet-limiter) and [spam limiter](https://docs.papermc.io/paper/reference/global-configuration#spam-limiter).

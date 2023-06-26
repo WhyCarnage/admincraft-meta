@@ -1,0 +1,28 @@
+[
+    ["allow-end", "https://bukkit.fandom.com/wiki/Bukkit.yml#allow-end"],
+    ["warn-on-overload", "https://bukkit.fandom.com/wiki/Bukkit.yml#warn-on-overload"],
+    ["permissions-file", "https://bukkit.fandom.com/wiki/Bukkit.yml#permissions-file"],
+    ["update-folder", "https://bukkit.fandom.com/wiki/Bukkit.yml#update-folder"],
+    ["ping-packet-limit", "https://bukkit.fandom.com/wiki/Bukkit.yml#ping-packet-limit"],
+    ["use-exact-login-location","https://bukkit.fandom.com/wiki/Bukkit.yml#use-exact-login-location"],
+    ["world-container", "https://bukkit.fandom.com/wiki/Bukkit.yml#world-container"],
+    ["plugin-profiling", "https://bukkit.fandom.com/wiki/Bukkit.yml#plugin-profiling"],
+    ["connection-throttle","https://bukkit.fandom.com/wiki/Bukkit.yml#connection-throttle"],
+    ["query-plugins", "https://bukkit.fandom.com/wiki/Bukkit.yml#query-plugins"],
+    ["shutdown-message", "https://bukkit.fandom.com/wiki/Bukkit.yml#shutdown-message"],
+    ["minimum-api", "https://bukkit.fandom.com/wiki/Bukkit.yml#minimum-api"],
+    ["spawn-limits", "https://bukkit.fandom.com/wiki/Bukkit.yml#spawn-limits"],
+    ["monsters", "https://bukkit.fandom.com/wiki/Bukkit.yml#monsters"],
+    ["animals", "https://bukkit.fandom.com/wiki/Bukkit.yml#animals"],
+    ["water-animals", "https://bukkit.fandom.com/wiki/Bukkit.yml#water-animals"],
+    ["ambient", "https://bukkit.fandom.com/wiki/Bukkit.yml#ambient"],
+    ["chunk-gc", "https://bukkit.fandom.com/wiki/Bukkit.yml#chunk-gc"],
+    ["load-threshold", "https://bukkit.fandom.com/wiki/Bukkit.yml#load-threshold"],
+    ["monster-spawns", "https://bukkit.fandom.com/wiki/Bukkit.yml#monster-spawns"],
+    ["autosave", "https://bukkit.fandom.com/wiki/Bukkit.yml#autosave"],
+    ["auto-updater", "https://bukkit.fandom.com/wiki/Bukkit.yml#auto-updater"],
+    ["aliases", "https://bukkit.fandom.com/wiki/Bukkit.yml#aliases"],
+    ["database", "https://bukkit.fandom.com/wiki/Bukkit.yml#database"],
+    ["OPTIONAL worlds","https://bukkit.fandom.com/wiki/Bukkit.yml#.2AOPTIONAL.2A_worlds"]
+
+]

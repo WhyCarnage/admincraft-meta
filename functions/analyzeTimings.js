@@ -103,7 +103,7 @@ module.exports = async function analyzeTimings(message, client, args) {
 
 	const timing_cost = parseInt(request.timingsMaster.system.timingcost);
 	if (timing_cost > 300) {
-		fields.push({ name: '❌ Timingcost', value: `Your timingcost is ${timing_cost}. Your cpu is overloaded and/or slow. Find a [better host](https://www.birdflop.com).`, inline: true });
+		fields.push({ name: '❌ Timingcost', value: `Your timingcost is ${timing_cost}. Your cpu is overloaded and/or slow. `, inline: true });
 	}
 
 	// fetch the latest mc version
@@ -181,14 +181,14 @@ module.exports = async function analyzeTimings(message, client, args) {
 		}
 	}
 	else if (flags.includes('-Dusing.aikars.flags=mcflags.emc.gs')) {
-		fields.push({ name: '❌ Outdated Flags', value: 'Update [Aikar\'s flags](https://docs.papermc.io/paper/aikars-flags).', inline: true });
+		fields.push({ name: '❌ Outdated Flags', value: 'Update [Aikar\'s flags](https://aikar.co/2018/07/02/tuning-the-jvm-g1gc-garbage-collector-flags-for-minecraft/).', inline: true });
 	}
 	else {
-		fields.push({ name: '❌ Aikar\'s Flags', value: 'Use [Aikar\'s flags](https://docs.papermc.io/paper/aikars-flags).', inline: true });
+		fields.push({ name: '❌ Aikar\'s Flags', value: 'Use [Aikar\'s flags](https://aikar.co/2018/07/02/tuning-the-jvm-g1gc-garbage-collector-flags-for-minecraft/).', inline: true });
 	}
 
 	const cpu = parseInt(request.timingsMaster.system.cpu);
-	if (cpu <= 2) fields.push({ name: '❌ Threads', value: `You only have ${cpu} thread(s). Find a [better host](https://www.birdflop.com).`, inline: true });
+	if (cpu <= 2) fields.push({ name: '❌ Threads', value: `You only have ${cpu} thread(s).`, inline: true });
 
 	const handlers = Object.keys(request_raw.idmap.handlers).map(i => { return request_raw.idmap.handlers[i]; });
 	handlers.forEach(handler => {
@@ -268,7 +268,7 @@ module.exports = async function analyzeTimings(message, client, args) {
 	if (timing_cost > 500) {
 		const suggestions = fields.length - 1;
 		TimingsEmbed.setColor(0xff0000).setDescription(null)
-			.setFields([{ name: '❌ Timingcost (CRITICAL)', value: `Your timingcost is ${timing_cost}. This value would be at most 200 on a reasonable server. Your cpu is critically overloaded and/or slow. Hiding ${suggestions} comparitively negligible suggestions until you resolve this fundamental problem. Find a [better host](https://www.birdflop.com).`, inline: true }]);
+			.setFields([{ name: '❌ Timingcost (URGENT)', value: `Your timingcost is ${timing_cost}. This value would be at most 200 on a reasonable server. Your cpu is critically overloaded and/or slow. Hiding ${suggestions} comparitively negligible suggestions until you resolve this fundamental problem.`, inline: true }]);
 		return [{ embeds: [TimingsEmbed] }];
 	}
 
@@ -293,8 +293,8 @@ module.exports = async function analyzeTimings(message, client, args) {
 						.setEmoji({ name: '➡️' })
 						.setStyle(ButtonStyle.Secondary),
 					new ButtonBuilder()
-						.setURL('https://github.com/pemigrade/botflop')
-						.setLabel('Botflop')
+						.setURL('https://github.com/Darkcarnage23/admincraft-meta')
+						.setLabel('source')
 						.setStyle(ButtonStyle.Link),
 				]),
 		);
@@ -310,8 +310,8 @@ module.exports = async function analyzeTimings(message, client, args) {
 						.setLabel('Dismiss and force analysis')
 						.setStyle(ButtonStyle.Secondary),
 					new ButtonBuilder()
-						.setURL('https://github.com/pemigrade/botflop')
-						.setLabel('Botflop')
+						.setURL('https://github.com/Darkcarnage23/admincraft-meta')
+						.setLabel('source')
 						.setStyle(ButtonStyle.Link),
 				]),
 		];

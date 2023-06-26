@@ -1,29 +1,54 @@
-# Birdflop Bot (Botflop)
-[Click here](https://discord.com/api/oauth2/authorize?client_id=787929894616825867&permissions=0&scope=bot) to invite Botflop to your server.
+# Admincraft's meta bot
+# Credits-original code belongs to Birdflop Bot (Botflop)
+- [Click here](https://discord.com/api/oauth2/authorize?client_id=787929894616825867&permissions=0&scope=bot) to invite Botflop to your server.
+- [click here](https://github.com/Pemigrade/botflop) to see the source code for the original bot
+-  Credited in help command too
 
 # Current abilities
+
+## Analyze timings reports
+Paste a timings report to review an in-depth description of potential optimizations.
+
 ## Analyze timings reports and Spark profiles
-Analyze a timings report or Spark profile to review an in-depth description of potential optimizations. You can try it out yourself on our [Discord](https://discord.gg/zsz3PzT)
+Analyze a timings report or Spark profile to review an in-depth description of potential optimizations.
 
-<img width="533" alt="image" src="https://user-images.githubusercontent.com/43528123/215833902-2ba4edcf-014b-41ea-8db5-e55e4218160a.png">
+![Timings 1](https://user-images.githubusercontent.com/43528123/118413487-33af2300-b665-11eb-8f11-eaa4ec5a2730.png)
 
-<img width="523" alt="image" src="https://user-images.githubusercontent.com/43528123/215834126-f26546f8-a3c2-4a11-982e-bd20d9aca9ef.png">
+![Timings 2](https://user-images.githubusercontent.com/43528123/118413524-66f1b200-b665-11eb-9dbe-9b6fcfc9fccf.png)
 
-## Hastebin upload (currently unavailable)
-Botflop converts text files and pastebin links into universally accessible bin links. You can try it out yourself on our [Discord](https://discord.gg/zsz3PzT)
+## File upload service
+The bot converts files and pastebin links into universally accessible bin links that contain multiple features such as syntax highlighting, suggestions and information censoring such as IPs.
 
-![message.txt](https://i.imgur.com/Q6WIAxp.png)
+## safeguards against executable uploads
+The bot scans messages containing executable files. While the user might have good intent we can't verify the safety of the compiled file being sent publicly hence this was added. This also helps deal with potential piracy such as people uploading jars of premium plugins.
 
-![latest.log](https://i.imgur.com/Iqao6Yp.png)
+## Read The Fucking Manual (RTFM)
+The bot currently can search through PaperMc, PurpurMC docs for their configuration by using web scraping.
+The bot can also do bukkit.yml and hopefully others in the future.
 
-![config.yml](https://i.imgur.com/bl9YqK9.png)
+## Guides command
+An easy, way for users to find relevant guides.
 
-![pastebin conversion](https://user-images.githubusercontent.com/43528123/148110058-d25cd65e-bc38-404a-a42e-278a74249474.png)
+## Piracy/offline mode checks
+The bot can detect offline mode in logs/timings and will let the people in chat know about said items being offline/containing cracked plugins.
 
-## React
-Botflop reacts to messages (requires Administrator permission)
+# setup guide
+1) git clone or download this repo
+2) open up a command prompt/PowerShell or use Linux's CLI and make sure you're in the area where this project is located
+3) run ``npm install`` which should install all the needed modules
+4) create a .env file and put ``token=Your_discord_bot's_token`` (if you haven't got one then generate one [here](https://discord.com/developers))
+5) you can start the bot via ``npm run start``
 
-<img width="269" alt="image" src="https://user-images.githubusercontent.com/43528123/215834368-631d9a04-24fc-4026-a6ae-04bfc87be142.png">
+<div align="center">
+
+| :memo: hint   |
+|:---------------------------|
+|  You can use [pm2](https://pm2.io) to keep the bot running in background, constantly and auto restart on crash |
+
+</div>
+
+this bot specifically was made to help the Admincraft server so some features might not be suited for others
+
 
 # Forks
-Feel free to fork. We request that you please give credit in some way (can be as simple as keeping binflop as the text upload destination), but you can do whatever you'd like with your forks. **We do not offer any support with forks.**
+You are welcome to fork this project or even use it for your use however please make sure credit is appropriately given such as the user who created the bot and that you keep in mind this bot is specifically geared towards Admincraft.

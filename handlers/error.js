@@ -12,12 +12,12 @@ module.exports = client => {
 			.setDescription(`\`\`\`\n${err}\n\`\`\``);
 		const row = [];
 		if (!userError) {
-			errEmbed.setFooter({ text: 'This was most likely an error on our end. Please report this at the Birdflop Discord' });
+			errEmbed.setFooter({ text: 'This was most likely an error on our end. Please report this at the github' });
 			row.push(new ActionRowBuilder()
 				.addComponents([
 					new ButtonBuilder()
-						.setURL('https://discord.gg/nmgtX5z')
-						.setLabel('Birdflop')
+						.setURL('https://gitlab.com/admincraft/Admincraft-meta/-/issues')
+						.setLabel('Github')
 						.setStyle(ButtonStyle.Link),
 				]));
 		}

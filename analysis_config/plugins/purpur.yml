@@ -1,13 +1,13 @@
 SilkSpawners:
   prefix: "❌"
   value: |-
-    You probably don't need SilkSpawners as Purpur already has its features.
+    Consider removing SilkSpawners as Purpur already has this [feature](https://purpurmc.org/docs/Configuration/silk-touch_1).
 MineableSpawners:
   prefix: "❌"
   value: |-
-    You probably don't need MineableSpawners as Purpur already has its features.
+    Consider removing  MineableSpawners as Purpur already has this [feature](https://purpurmc.org/docs/Configuration/silk-touch_1).
 VillagerLobotomizatornator:
   prefix: "❌"
   value: |-
-    You probably don't need VillagerLobotomizatornator as Purpur already adds its features.
+    You probably don't need VillagerLobotomizatornator as Purpur already has this [feature](https://purpurmc.org/docs/Configuration/lobotomize).
     Enable villager.lobotomize.enabled in purpur.yml.

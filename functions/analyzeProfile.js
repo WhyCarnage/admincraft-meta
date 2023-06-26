@@ -33,8 +33,7 @@ module.exports = async function analyzeProfile(message, client, args) {
 	client.logger.info(`Spark Profile analyzed from ${author.tag} (${author.id}): ${url}`);
 
 	const response_raw = await fetch(url + '?raw=1');
-	const sampler = await response_raw.json();
-
+	const sampler = await response_raw.json().catch(() => undefined);
 	if (!sampler) {
 		ProfileEmbed.setFields([{
 			name: '❌ Processing Error',
@@ -47,6 +46,17 @@ module.exports = async function analyzeProfile(message, client, args) {
 	}
 
 	ProfileEmbed.setAuthor({ name: 'Spark Profile Analysis', iconURL: 'https://i.imgur.com/deE1oID.png', url: url });
+
+	if(!sampler.metadata.hasOwnProperty('serverConfigurations')) {
+		ProfileEmbed.setFields([{
+			name: '❌ Processing Error',
+			value: 'The bot cannot process this Spark profile. This is a heap summary report.',
+			inline: true,
+		}]);
+		ProfileEmbed.setColor(0xff0000);
+		ProfileEmbed.setDescription(null);
+		return [{ embeds: [ProfileEmbed] }];
+	}
 
 	const platform = sampler.metadata.platform.name;
 
@@ -99,6 +109,7 @@ module.exports = async function analyzeProfile(message, client, args) {
 		ProfileEmbed.setDescription(null);
 		return [{ embeds: [ProfileEmbed] }];
 	}
+
 	if (mcversion.split(')')[0] != latest) {
 		version = version.replace('git-', '').replace('MC: ', '');
 		fields.push({ name: '❌ Outdated', value: `You are using \`${version}\`. Update to \`${latest}\`.`, inline: true });
@@ -167,7 +178,7 @@ module.exports = async function analyzeProfile(message, client, args) {
 	}
 
 	const cpu = sampler.metadata.systemStatistics.cpu.threads;
-	if (cpu <= 2) fields.push({ name: '❌ Threads', value: `You only have ${cpu} thread(s). Find a [better host](https://www.birdflop.com).`, inline: true });
+	if (cpu <= 2) fields.push({ name: '❌ Threads', value: `You only have ${cpu} thread(s).`, inline: true });
 
 	// Probably a way to do this, idk yet
 	// const handlers = Object.keys(request_raw.idmap.handlers).map(i => { return request_raw.idmap.handlers[i]; });
@@ -257,8 +268,8 @@ module.exports = async function analyzeProfile(message, client, args) {
 						.setEmoji({ name: '➡️' })
 						.setStyle(ButtonStyle.Secondary),
 					new ButtonBuilder()
-						.setURL('https://github.com/pemigrade/botflop')
-						.setLabel('Botflop')
+						.setURL('https://github.com/Darkcarnage23/admincraft-meta')
+						.setLabel('source')
 						.setStyle(ButtonStyle.Link),
 				]),
 		);
@@ -274,8 +285,8 @@ module.exports = async function analyzeProfile(message, client, args) {
 						.setLabel('Dismiss and force analysis')
 						.setStyle(ButtonStyle.Secondary),
 					new ButtonBuilder()
-						.setURL('https://github.com/pemigrade/botflop')
-						.setLabel('Botflop')
+						.setURL('https://gitlab.com/admincraft/Admincraft-meta')
+						.setLabel('source')
 						.setStyle(ButtonStyle.Link),
 				]),
 		];

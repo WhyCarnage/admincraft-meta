@@ -48,8 +48,8 @@ module.exports = {
 										.setEmoji({ name: '➡️' })
 										.setStyle(ButtonStyle.Secondary),
 									new ButtonBuilder()
-										.setURL('https://github.com/pemigrade/botflop')
-										.setLabel('Botflop')
+										.setURL('https://github.com/Darkcarnage23/admincraft-meta')
+										.setLabel('source')
 										.setStyle(ButtonStyle.Link),
 								]),
 						);

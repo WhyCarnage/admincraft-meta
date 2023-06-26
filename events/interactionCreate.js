@@ -6,9 +6,9 @@ module.exports = async (client, interaction) => {
 	// Get the command from the available cmds in the bot, if there isn't one, just return because discord will throw an error itself
 	const command = client.commands.get(interaction.commandName);
 	if (!command) return;
-
 	// Make args variable from interaction options for compatibility with message command code
 	const args = interaction.options._hoistedOptions;
+	console.log(args)
 
 	// Set args to value of options
 	args.forEach(arg => args[args.indexOf(arg)] = arg.value);

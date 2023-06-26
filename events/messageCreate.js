@@ -1,6 +1,5 @@
 const analyzeTimings = require('../functions/analyzeTimings');
 const analyzeProfile = require('../functions/analyzeProfile');
-const { createPaste } = require('hastebin');
 const fetch = (...args) => import('node-fetch').then(({ default: e }) => e(...args));
 const { EmbedBuilder, PermissionsBitField, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
 module.exports = async (client, message) => {
@@ -25,41 +24,81 @@ module.exports = async (client, message) => {
 	let prefix = process.env.PREFIX;
 
 	try {
-		// Binflop
+		// checks if theres an attachment to the message
 		if (message.attachments.size > 0) {
-			const url = message.attachments.first().url;
-			const filetypes = ['.log', '.txt', '.json', '.yml', '.yaml', '.css', '.py', '.js', '.sh', '.config', '.conf'];
-			if (!url.endsWith('.html')) {
-				if (!message.attachments.first().contentType) return;
-				const filetype = message.attachments.first().contentType.split('/')[0];
-				if (filetypes.some(ext => url.endsWith(ext)) || filetype == 'text') {
-					// Start typing
-					await message.channel.sendTyping();
+			// needed to check if the message will need to be deleted at the end of the loop
+			shall_delete = false
 
-					// fetch the file from the external URL
-					const res = await fetch(url);
+			// create the embed
+			const PasteEmbed = new EmbedBuilder()
+			.setTitle('Please use a paste service instead!')
+			.setColor(0x1D83D4)
+			.setDescription("Paste services are more mobile friendly and easier to read than just posting a log file")
+			.setFooter({ text: `Requested by ${message.author.tag}`, iconURL: message.author.avatarURL() });
 
-					// take the response stream and read it to completion
-					let text = await res.text();
+			// Discord deprecated .addfield so we need to create an array to store the fields before adding them to the embed
+			let fields = []
 
-					let truncated = false;
-					if (text.length > 100000) {
-						text = text.substring(0, 100000);
-						truncated = true;
+			// loop through all the attachments
+			for (const attachment of message.attachments.values()) {
+				// get the url of the attachment
+				const url = attachment.url;
+				// list of filetypes that are allowed to be uploaded
+				const filetypes = ['.log', '.txt', '.json', '.yml', '.yaml', '.css', '.py', '.js', '.sh', '.config', '.conf','.properties'];
+				// list of executables that are not allowed to be uploaded
+				const executables = [".exe",".app",".dmg",".pkg",".deb",".rpm",".jar",".bat",".sh",".cmd",".msi"]
+				
+
+				// ignore html although to be honest idk why anyone would upload a html file
+				if (!url.endsWith('.html')) {
+					let parts = url.split('.');
+					const filetype = message.attachments.first().contentType?.split('/')[0] || parts[parts.length - 1];
+					if ((filetypes.some(ext => url.endsWith(ext)) || filetype == 'text') && (!executables.some(ext => url.endsWith(ext)) || filetype == 'application')) {
+	
+						// Start typing
+						await message.channel.sendTyping();
+	
+						// fetch the file from the external URL
+						let text = await fetch(url).then(res => {return res.text() });
+	
+						//  if the string is too long, truncate it. the api does not accept files over 10mb
+						let truncated = false;
+						if (text.length >  (10 * 1024 * 1024)) {
+							   text = text.substring(0, (10 * 1024 * 1024));
+							   truncated = true;
+						  }
+				
+	
+						let response = await fetch("https://api.mclo.gs/1/log", {
+							method: "POST",
+							body: `content=${text}`,
+							headers: {"content-type": "application/x-www-form-urlencoded"},
+						  })
+						  .then(res => res.json())
+						  .then(data => data["url"])
+						  .catch(err => client.logger.info(err));
+						if (truncated) response = response + ' (file was truncated because it was over 10 mb)';
+						  
+						fields.push({ name: attachment.name, value: response, inline: false});
+
 					}
-
-					let response = await createPaste(text, { server: 'https://bin.birdflop.com' });
-					if (truncated) response = response + '\n(file was truncated because it was too long.)';
-
-					const PasteEmbed = new EmbedBuilder()
-						.setTitle('Please use a paste service')
-						.setColor(0x1D83D4)
-						.setDescription(response)
-						.setFooter({ text: `Requested by ${message.author.tag}`, iconURL: message.author.avatarURL() });
-					await message.channel.send({ embeds: [PasteEmbed] });
-					client.logger.info(`File uploaded by ${message.author.tag} (${message.author.id}): ${response}`);
 				}
+				// if the file is an executable, mark the message for deletion
+				if (executables.some(ext => url.endsWith(ext)) || attachment.contentType?.split('/')[0] == 'application') {
+					shall_delete = true
+				}
+			  }
+			  PasteEmbed.addFields(fields)
+			  if (fields.length > 0) {
+			  await message.reply({ embeds: [PasteEmbed] });
+			  }
+			if (shall_delete) {
+				await message.reply("For safety reasons we do not allow executables to be sent as they might contain malware. If you're compiling for someone please DM them and as a reminder. We cannot verify if a compiled jar has not been tampered in any way").then(async () => { 
+					await message.delete()
+			   })
+
 			}
+	
 		}
 
 		// Pastebin is blocked in some countries
@@ -73,14 +112,23 @@ module.exports = async (client, message) => {
 				const res = await fetch(`https://pastebin.com/raw/${key}`);
 				let text = await res.text();
 
-				let truncated = false;
-				if (text.length > 100000) {
-					text = text.substring(0, 100000);
-					truncated = true;
-				}
+					//  if the string is too long, truncate it. the api does not accept files over 10mb
+					let truncated = false;
+					if (text.length >  (10 * 1024 * 1024)) {
+						   text = text.substring(0, (10 * 1024 * 1024));
+						   truncated = true;
+					  }
+			
 
-				let response = await createPaste(text, { server: 'https://bin.birdflop.com' });
-				if (truncated) response = response + '\n(file was truncated because it was too long.)';
+					let response = await fetch("https://api.mclo.gs/1/log", {
+						method: "POST",
+						body: `content=${text}`,
+						headers: {"content-type": "application/x-www-form-urlencoded"},
+					  })
+					  .then(res => res.json())
+					  .then(data => data["url"])
+					  .catch(err => client.logger.info(err));
+					if (truncated) response = response + '\n(file was truncated because it was over 10 mb)';
 
 				const PasteEmbed = new EmbedBuilder()
 					.setTitle('Pastebin is blocked in some countries')
@@ -132,8 +180,8 @@ module.exports = async (client, message) => {
 												.setEmoji({ name: '➡️' })
 												.setStyle(ButtonStyle.Secondary),
 											new ButtonBuilder()
-												.setURL('https://github.com/pemigrade/botflop')
-												.setLabel('Botflop')
+												.setURL('https://github.com/Darkcarnage23/admincraft-meta')
+												.setLabel('source')
 												.setStyle(ButtonStyle.Link),
 										]),
 								);
@@ -215,7 +263,7 @@ module.exports = async (client, message) => {
 				{ name: '**Channel:**', value: message.channel.name },
 				{ name: '**INTERACTION:**', value: prefix + command.name },
 				{ name: '**Error:**', value: `\`\`\`\n${err}\n\`\`\`` }]);
-		client.guilds.cache.get('811354612547190794').channels.cache.get('830013224753561630').send({ content: '<@&839158574138523689>', embeds: [interactionFailed] });
+
 		message.author.send({ embeds: [interactionFailed] }).catch(err => client.logger.warn(err));
 		client.logger.error(err.stack);
 	}
