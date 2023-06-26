@@ -35,9 +35,11 @@ module.exports = {
         }
 	],   	async execute(message, args, client) {
 		try {
+            // error handling
             if (!args[0]) return await message.reply(`You did not specify. Valid options are \`${opts.map((o) => o.name).join('| ')} \``)
             if (!args[1]) return await message.reply('You did not give a search term')
             if (args[1].length < 3) return message.reply('You must use at least 3 characters')
+            
             // changes the input into the closest
             const matches = stringSimilarity.findBestMatch(args[0].toLowerCase(), valid_options);
             const manual = matches.bestMatch.target;
@@ -111,7 +113,6 @@ module.exports = {
                   configuration.push({ url, href });
                 }
             
-                console.log(configuration)
         
                 for (let i = 0; i < configuration.length; i++) {
                   if (re.test(configuration[i].href)) {

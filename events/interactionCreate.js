@@ -8,7 +8,6 @@ module.exports = async (client, interaction) => {
 	if (!command) return;
 	// Make args variable from interaction options for compatibility with message command code
 	const args = interaction.options._hoistedOptions;
-	console.log(args)
 
 	// Set args to value of options
 	args.forEach(arg => args[args.indexOf(arg)] = arg.value);
