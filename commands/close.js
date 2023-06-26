@@ -28,10 +28,11 @@ module.exports = {
             if (!message.channel.permissionsFor(message.guild.members.me).has(PermissionFlagsBits.ManageThreads)) {
                 return await message.reply("I cannot modify this post as i don't have permission to do so!")
             }
+            const user = message?.author || message?.user|| message?.member
             const solvedTag = availableTags.find(t => t.name.toLowerCase() == 'solved')?.id
-            postMessage.setAppliedTags([solvedTag], 'Marked as solved By ' + message.member.tag)
+            postMessage.setAppliedTags([solvedTag], 'Marked as solved By ' + user.username + '#' + user.discriminator)
             if (!message.channel.archived) {
-            await message.reply({ embeds: [solvedEmbed] }).then(m => setTimeout(() => m.delete(), 1500)).then(async() => setTimeout(async() => await postMessage.setArchived(true, 'Marked as solved By ' + message.member.tag), 560))
+            await message.reply({ embeds: [solvedEmbed] }).then(m => setTimeout(() => m.delete(), 1500)).then(async() => setTimeout(async() => await postMessage.setArchived(true, 'Marked as solved By ' + user.tag), 2000))
             
             }
 

@@ -71,7 +71,7 @@ module.exports = {
 					plugins += `${json.plugins.names[i]} (${json.plugins.raw[i].split(' ')[1]}), `;
 				}
 				}
-			
+			const user = message?.author || message?.user|| message?.member
 			const embed = new EmbedBuilder()
 				.setColor('#0099ff')
 				.setTitle(`${json.hostname ?? json.ip}:${json.port}`)

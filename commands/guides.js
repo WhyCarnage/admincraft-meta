@@ -127,22 +127,26 @@ const guides = {
 	name: 'guides',
 	description: "Get's useful information'",
 	ephemeral: false,
-	aliases: ['guides','g','info'],
+	aliases: ['guide','g','info'],
 	cooldown: 10,
 	options:  [
 		{
 			'type': ApplicationCommandOptionType.String,
-			'name': 'java_bedrock',
-			'description': 'The server type.',
+			'name': 'guide',
+			'description': 'What guide you want to see',
 			'required': true,
 			'choices': C,	
 		}
 	],   
 	async execute(message, args, client) {
 		try {
+      // in case of message command is being used instead of slash
       if (!args[0]) return message.reply('Please provide a guide name. \n\n**Available guides:**\n' + Object.keys(guides).join(', '));
       if (!guides[args[0]]) return message.reply('Invalid guide name. \n\n**Available guides:**\n' + Object.keys(guides).join(', '));
-      message.reply({ embeds: [guides[args[0]]] });
+      const guide = guides[args[0]];
+      const user = message?.author || message?.user|| message?.member
+            guide.setFooter({text: `Requested by ${user.tag}`, url: user.displayAvatarURL()});
+      message.reply({ embeds: [guide] });
 		}
 		catch (err) { client.error(err, message); }
 	},
