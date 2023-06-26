@@ -2,11 +2,13 @@ const { Client, GatewayIntentBits, Partials } = require('discord.js');
 const fs = require('fs');
 const client = new Client({
 	partials: [
+		Partials.ThreadMember,
 		Partials.Message,
 		Partials.Channel,
 		Partials.User,
 	],
 	intents: [
+		GatewayIntentBits.GuildMessages,
 		GatewayIntentBits.MessageContent,
 		GatewayIntentBits.Guilds,
 		GatewayIntentBits.GuildMessages,

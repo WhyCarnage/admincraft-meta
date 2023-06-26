@@ -285,7 +285,7 @@ module.exports = async function analyzeProfile(message, client, args) {
 						.setLabel('Dismiss and force analysis')
 						.setStyle(ButtonStyle.Secondary),
 					new ButtonBuilder()
-						.setURL('https://gitlab.com/admincraft/Admincraft-meta')
+						.setURL('https://github.com/Darkcarnage23/admincraft-meta')
 						.setLabel('source')
 						.setStyle(ButtonStyle.Link),
 				]),

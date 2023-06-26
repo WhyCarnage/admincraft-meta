@@ -1,4 +1,5 @@
 const { EmbedBuilder } = require('discord.js');
+const { Console } = require('winston/lib/winston/transports');
 module.exports = async (client,thread) => {
 	// fetches the parent channel of the thread
 	parent = thread.guild.channels.cache.get(thread.parentId);
@@ -10,7 +11,7 @@ module.exports = async (client,thread) => {
 	.setColor('Random')
 	.setDescription('Once you have finished, please close your thread.\nMake sure to provide as much helpful information as possible such as logs/what you tried and what your exact issue is')
 	.setFields({name: 'command to close', value: '/close\n!close\n!solved'})
-	.setFooter({ text: `Requested by ${owner.displayName}`, iconURL: owner.avatarURL() });
+	.setFooter({ text: `Requested by ${owner.username}#${owner.discriminator}`, iconURL: owner?.displayAvatarURL() || owner?.avatarURL() });
 
 	const msg = await thread.send({ embeds: [embed] })
 	await msg.pin()
