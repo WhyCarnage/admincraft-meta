@@ -145,7 +145,6 @@ const guides = {
       if (!guides[args[0]]) return message.reply('Invalid guide name. \n\n**Available guides:**\n' + Object.keys(guides).join(', '));
       const guide = guides[args[0]];
       const user = message?.author || message?.user|| message?.member
-            guide.setFooter({text: `Requested by ${user.tag}`, url: user.displayAvatarURL()});
       message.reply({ embeds: [guide] });
 		}
 		catch (err) { client.error(err, message); }
