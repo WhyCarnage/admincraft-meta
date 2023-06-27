@@ -1,4 +1,6 @@
 const  { EmbedBuilder,ApplicationCommandOptionType } = require('discord.js');
+const stringSimilarity = require('string-similarity');
+
 // Temporary command 
 // TODO store in database and make it so it can be editable although this out of scope for now
 const guides = {
@@ -140,12 +142,19 @@ const guides = {
 	],   
 	async execute(message, args, client) {
 		try {
+      
       // in case of message command is being used instead of slash
       if (!args[0]) return message.reply('Please provide a guide name. \n\n**Available guides:**\n' + Object.keys(guides).join(', '));
-      if (!guides[args[0]]) return message.reply('Invalid guide name. \n\n**Available guides:**\n' + Object.keys(guides).join(', '));
-      const guide = guides[args[0]];
+      const matches = stringSimilarity.findBestMatch(args[0].toLowerCase(), Object.keys(guides));
+      if (!guides[matches.bestMatch.target]) return message.reply('Invalid guide name. \n\n**Available guides:**\n' + Object.keys(guides).join(', '));
+      const guide = guides[matches.bestMatch.target];
       const user = message?.author || message?.user|| message?.member
-      message.reply({ embeds: [guide] });
+      if (typeof guide === 'string') return message.reply(guide);
+      // if embed
+      if (guide instanceof EmbedBuilder) {
+        guide.setFooter({text: 'Requested by ' + user.tag, iconURL: user.displayAvatarURL({ dynamic: true }) }) 
+       return message.reply({ embeds: [guide] });
+      }
 		}
 		catch (err) { client.error(err, message); }
 	},
