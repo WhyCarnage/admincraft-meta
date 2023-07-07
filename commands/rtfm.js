@@ -17,8 +17,10 @@ module.exports = {
 	name: 'rtfm',
 	description: 'Read the fucking manual will ya?!',
 	ephemeral: true,
-	aliases: [],
-	cooldown: 10,
+	aliases: ['r'],
+  usage: `<${opts.map((o) => o.name).join(' | ')}> <term> (term must be more than 3 letters)`,
+  args: true,
+	cooldown: 15,
 	options:  [
 		{
 			'type': ApplicationCommandOptionType.String,
@@ -35,8 +37,11 @@ module.exports = {
         }
 	],   	async execute(message, args, client) {
 		try {
-            // error handling
-            if (!args[0]) return await message.reply(`You did not specify. Valid options are \`${opts.map((o) => o.name).join('| ')} \``)
+
+            // couldn't be asked to figure out why discord gives different responses here
+            const user = message?.author ?? message?.member?.user ?? message?.user;	
+
+            // further error handling such as not giving a search term or too short of one
             if (!args[1]) return await message.reply('You did not give a search term')
             if (args[1].length < 3) return message.reply('You must use at least 3 characters')
             
@@ -90,8 +95,7 @@ module.exports = {
                     .setTitle(`Search results for ${args[1]} in PaperMC docs`)
                     .setTimestamp()
                     .setDescription(result)
-                    .setFooter({ text: `Requested by ${message.member.username}`, iconURL: message.member.avatarURL() });
-
+                    .setFooter({ text: `Requested by ${user.username}`, iconURL: user.avatarURL() });
                 await message.reply({ embeds: [resultEmbed] });
             }
             
@@ -132,7 +136,7 @@ module.exports = {
                     .setTitle(`Search results for ${args[1]} in PurpurMc docs`)
                     .setTimestamp()
                     .setDescription(result)
-                    .setFooter({ text: `Requested by ${message.member.username}`, iconURL: message.member.avatarURL() });
+                    .setFooter({ text: `Requested by ${user.username}`, iconURL: user.avatarURL() });
 
                 await message.reply({ embeds: [resultEmbed] });
             }
@@ -177,7 +181,7 @@ module.exports = {
                     .setTitle(`Search results for ${args[1]} in Bukkit.yml wiki`)
                     .setTimestamp()
                     .setDescription(result)
-                    .setFooter({ text: `Requested by ${message.member.username}`, iconURL: message.member.avatarURL() });
+                    .setFooter({ text: `Requested by ${user.username}`, iconURL: user.avatarURL() });
 
                 await message.reply({ embeds: [resultEmbed] });
             }
@@ -188,6 +192,9 @@ module.exports = {
             }
 
 		}
-		catch (err) { client.error(err, message); }
+		catch (err) { 
+      client.error(err, message);
+      
+     }
 	},
 };

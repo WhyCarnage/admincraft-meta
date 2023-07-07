@@ -144,11 +144,16 @@ const guides = {
 		try {
       
       // in case of message command is being used instead of slash
-      if (!args[0]) return message.reply('Please provide a guide name. \n\n**Available guides:**\n' + Object.keys(guides).join(', '));
-      const matches = stringSimilarity.findBestMatch(args[0].toLowerCase(), Object.keys(guides));
+      if (args.length == 0) return message.reply('Please provide a guide name. \n\n**Available guides:**\n' + Object.keys(guides).join(', '));
+      // we use string similarity to find the best match for the guide name for the message command since slash uses choices
+      // args.join(' ') is used to make it work with multi word guides and since we're only really expecting one argument
+      const matches = stringSimilarity.findBestMatch(args.join(' ').toLowerCase(), Object.keys(guides));
+      // if its not in the list of guides then we return a list of guides
       if (!guides[matches.bestMatch.target]) return message.reply('Invalid guide name. \n\n**Available guides:**\n' + Object.keys(guides).join(', '));
       const guide = guides[matches.bestMatch.target];
-      const user = message?.author || message?.user|| message?.member
+      const user = message?.author ?? message?.member?.user ?? message?.user;	
+      // added this since we may have "guides" that simply are strings and some that are embeds
+      // if string
       if (typeof guide === 'string') return message.reply(guide);
       // if embed
       if (guide instanceof EmbedBuilder) {

@@ -22,6 +22,8 @@ module.exports = async function analyzeProfile(message, client, args) {
 			ProfileEmbed.addFields([{ name: '⚠️ Timings Report', value: 'This is a Timings report. Use /timings instead for this type of report.' }]);
 			return [{ embeds: [ProfileEmbed] }];
 		}
+		const whitelist = ['https://spark.lucko.me/downloads', 'https://spark.lucko.me/download', 'https://spark.lucko.me/docs']
+		if ( whitelist.some(v => arg.toLowerCase().startsWith(v))) return; // Ignore these links , used a /profile/ pathing
 		if (arg.startsWith('https://spark.lucko.me/')) url = arg;
 	}
 

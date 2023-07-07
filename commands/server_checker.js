@@ -13,9 +13,9 @@ module.exports = {
 	name: 'checkserver',
 	description: 'ping a server and get info on it.',
 	aliases: ['cs'],
-	ephemeral: false,
+	ephemeral: true,
 	args: true,
-	usage: '<server ip>:<port> (dont add the port if its 25565) <java/bedrock>',
+	usage: 'server ip:port java/bedrock',
 	cooldown: 20,
 	
 	options: [
@@ -45,7 +45,6 @@ module.exports = {
 	async execute(message, args, client) {
 	try {
 
-		if (!args[0]) return await message.reply('You did not specify a server ip.')
 		if (!args[1]) return await message.reply('You did not specify a server type.')
 		const input = args[0];
 		const ip = encodeURIComponent(input.split(':')[0]);
@@ -71,7 +70,7 @@ module.exports = {
 					plugins += `${json.plugins.names[i]} (${json.plugins.raw[i].split(' ')[1]}), `;
 				}
 				}
-			const user = message?.author || message?.user|| message?.member
+			const user = message?.author ?? message?.member?.user ?? message?.user;	
 			const embed = new EmbedBuilder()
 				.setColor('#0099ff')
 				.setTitle(`${json.hostname ?? json.ip}:${json.port}`)
@@ -82,6 +81,7 @@ module.exports = {
 				.setTimestamp()
 				.setAuthor({name: `${user.username}#${user.discriminator}`, iconURL: user.displayAvatarURL({ dynamic: true })})
 				.setFooter({text: 'Server Checker', iconURL: 'https://mcsrvstat.us/img/minecraft.png'});
+				// if theres mods or plugins than we can add that info too
 				if (json?.plugins) embed.addFields({ name: 'Plugins', value: `${json.plugins ? plugins : 'No plugins'}`, inline: true })
 				if (json?.mods) embed.addFields({ name: 'Mods', value: `${json.mods ? json.mods.name.join(', ') : 'No mods'}`, inline: true })
 

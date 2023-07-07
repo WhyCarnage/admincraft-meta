@@ -19,7 +19,13 @@ module.exports = async (client, interaction) => {
 		await interaction.deferReply({ ephemeral: command.ephemeral });
 		interaction.reply = interaction.editReply;
 		command.execute(interaction, args, client);
-	}
+		// if cmd takes too long to respond time it out
+		setTimeout(() => {
+			if (!interaction.replied) {
+			  interaction.editReply('Command timed out.');
+			}
+		  }, 4000);
+		} 
 	catch (err) {
 		const interactionFailed = new EmbedBuilder()
 			.setColor('Random')

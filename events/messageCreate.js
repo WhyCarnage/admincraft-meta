@@ -6,7 +6,7 @@ module.exports = async (client, message) => {
 	if (message.author.bot) return;
 
 	// If the bot can't read message history or send messages, don't execute a command
-	if (message.guild && (!message.guild.members.me.permissionsIn(message.channel).has(PermissionsBitField.Flags.SendMessages) || !message.guild.members.me.permissionsIn(message.channel).has(PermissionsBitField.Flags.ReadMessageHistory))) return;
+	//if (message.guild && (!message.guild.members.me.permissionsIn(message.channel).has(PermissionsBitField.Flags.SendMessages) || !message.guild.members.me.permissionsIn(message.channel).has(PermissionsBitField.Flags.ReadMessageHistory))) return;
 
 	// make a custom function to replace message.reply
 	// this is to send the message to the channel without a reply if reply fails
@@ -14,7 +14,7 @@ module.exports = async (client, message) => {
 	message.reply = function reply(object) {
 		return message.msgreply(object).catch(err => {
 			client.logger.warn(err);
-			return message.channel.send(object).catch(err => {
+			return message.channel.send(object).catch(err => {	
 				client.logger.error(err.stack);
 			});
 		});
@@ -249,7 +249,7 @@ module.exports = async (client, message) => {
 
 	// execute the command
 	try {
-		client.logger.info(`${message.author.tag} issued message command: ${message.content}, in ${message.guild.name}`);
+		client.logger.info(`${message.author.tag} issued message command: ${message.content}, in ${message?.guild?.name ?? message.author.username + `#${message.author.discriminator}` + ` (DMs)`} `);
 		command.execute(message, args, client);
 	}
 	catch (err) {
@@ -259,11 +259,12 @@ module.exports = async (client, message) => {
 			.setAuthor({ name: message.author.tag, iconURL: message.author.avatarURL() })
 			.addFields([
 				{ name: '**Type:**', value: 'Message' },
-				{ name: '**Guild:**', value: message.guild.name },
-				{ name: '**Channel:**', value: message.channel.name },
+				{ name: '**Guild:**', value: message?.guild?.name ?? 'None' },
+				{ name: '**Channel:**', value: message?.channel?.name ?? `${message.author?.username}#${message?.author?.discriminator} (DM)` },
 				{ name: '**INTERACTION:**', value: prefix + command.name },
 				{ name: '**Error:**', value: `\`\`\`\n${err}\n\`\`\`` }]);
 
+		// Send the error to the user
 		message.author.send({ embeds: [interactionFailed] }).catch(err => client.logger.warn(err));
 		client.logger.error(err.stack);
 	}

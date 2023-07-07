@@ -8,7 +8,7 @@ Access to Data is only permitted to Bot's developers, and only in the scope requ
 
 ## Storage of Data
 
-Data is stored in a Mysql database. The database is secure, however no guarantee is provided and the Bot owners assume no liability for the unintentional or malicious breach of Data. In the event of an unauthorized Data access, users will be notified through the Discord client application. We do not store any users data, upon data being received its immediately processed then discarded.
+Data is stored on a VPS in the form of a database/logfile, however no guarantee is provided and the Bot owners assume no liability for the unintentional or malicious breach of Data. In the event of an unauthorized Data access, users will be notified through the Discord client application. We do not store any users data, upon data being received its immediately processed then discarded.
 
 ## Questions
 
