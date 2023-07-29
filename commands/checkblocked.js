@@ -1,6 +1,12 @@
 // Author: Cooleg <https://github.com/TrollsterCooleg>
 
-const fetch = (...args) => import('node-fetch').then(({ default: e }) => e(...args));
+const fetch = (...args) =>
+  Promise.race([
+    import('node-fetch').then(({ default: e }) => e(...args)),
+    new Promise((_, reject) =>
+      setTimeout(() => reject(new Error('Fetch timeout')), 500) 
+    ),
+  ]);;
 const crypto = require('node:crypto');
 const { EmbedBuilder, ApplicationCommandOptionType } = require('discord.js');
 let hashes;
@@ -91,19 +97,17 @@ module.exports = {
         hashes = text.split("\n");
 
         let blocked = numeric ? testBlockedNumeric(parts) : testBlockedDomain(parts);
-		
         let blockedString = blocked ? "is **BLOCKED**" : "is not blocked";
 
 		const user = message?.author ?? message?.member?.user ?? message?.user;	
 		// gets the server icon if it exists otherwise uses the default minecraft icon
-		let icon = await fetch(`https://eu.mc-api.net/v3/server/favicon/${ip}:${port}`);
+		let icon = await fetch(`https://eu.mc-api.net/v3/server/favicon/${ip}:${port}`).catch(() => {return {ok: false} });
         if (!icon.ok) {
             icon = "https://mcsrvstat.us/img/minecraft.png"
         } else
         {
         icon = `https://eu.mc-api.net/v3/server/favicon/${ip}:${port}`;
         }
-
 		const embed = new EmbedBuilder()
 			.setColor('#0099ff')
 			.setTitle(`${ip}`)
