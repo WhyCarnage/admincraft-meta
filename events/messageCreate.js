@@ -3,6 +3,9 @@ const analyzeProfile = require('../functions/analyzeProfile');
 const fetch = (...args) => import('node-fetch').then(({ default: e }) => e(...args));
 const { EmbedBuilder, PermissionsBitField, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
 module.exports = async (client, message) => {
+	if (message.type == 6 && message.author.id === client.user.id) {
+		await message.delete();
+	}
 	if (message.author.bot) return;
 
 	// If the bot can't read message history or send messages, don't execute a command
@@ -47,6 +50,7 @@ module.exports = async (client, message) => {
 				const filetypes = ['.log', '.txt', '.json', '.yml', '.yaml', '.css', '.py', '.js', '.sh', '.config', '.conf','.properties'];
 				// list of executables that are not allowed to be uploaded
 				const executables = [".exe",".app",".dmg",".pkg",".deb",".rpm",".jar",".bat",".sh",".cmd",".msi"]
+				
 				
 
 				// ignore html although to be honest idk why anyone would upload a html file
