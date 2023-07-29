@@ -61,7 +61,7 @@ module.exports = {
 	name: 'checkblocked',
 	description: 'check if a java server is mojang blocked.',
 	aliases: ['blocked'],
-	ephemeral: true,
+	ephemeral: false,
 	args: true,
 	usage: 'server ip:port',
 	cooldown: 20,
