@@ -78,7 +78,7 @@ module.exports = {
 	try {
 
 		const input = args[0];
-		const ip = encodeURIComponent(input.split(':')[0]);
+		const ip = encodeURIComponent(input.split(':')[0]).toLowerCase();
 		const port = input.split(':')[1] || '25565';
 		if (!isValidMinecraftServer(ip)) return message.reply('Invalid server ip.');
         const parts = ip.split('.');
