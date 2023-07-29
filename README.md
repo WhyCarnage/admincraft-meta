@@ -52,3 +52,4 @@ this bot specifically was made to help the Admincraft server so some features mi
 
 # Forks
 You are welcome to fork this project or even use it for your use however please make sure credit is appropriately given such as the user who created the bot and that you keep in mind this bot is specifically geared towards Admincraft.
+

@@ -22,8 +22,11 @@ module.exports = async function analyzeProfile(message, client, args) {
 			ProfileEmbed.addFields([{ name: '⚠️ Timings Report', value: 'This is a Timings report. Use /timings instead for this type of report.' }]);
 			return [{ embeds: [ProfileEmbed] }];
 		}
+
+		// prevents the issue of the bot trying to analyze a link that is not a spark profile (e.g. a link to download spark or its documentation)
 		const whitelist = ['https://spark.lucko.me/downloads', 'https://spark.lucko.me/download', 'https://spark.lucko.me/docs']
-		if ( whitelist.some(v => arg.toLowerCase().startsWith(v))) return; // Ignore these links , used a /profile/ pathing
+		if ( whitelist.some(v => arg.toLowerCase().startsWith(v))) return;
+
 		if (arg.startsWith('https://spark.lucko.me/')) url = arg;
 	}
 
@@ -36,6 +39,7 @@ module.exports = async function analyzeProfile(message, client, args) {
 
 	const response_raw = await fetch(url + '?raw=1');
 	const sampler = await response_raw.json().catch(() => undefined);
+
 	if (!sampler) {
 		ProfileEmbed.setFields([{
 			name: '❌ Processing Error',
@@ -47,6 +51,16 @@ module.exports = async function analyzeProfile(message, client, args) {
 		return [{ embeds: [ProfileEmbed] }];
 	}
 
+	if(!sampler.metadata.hasOwnProperty('serverConfigurations')) {
+		ProfileEmbed.setFields([{
+			name: '❌ Processing Error',
+			value: 'The bot cannot process this Spark profile. This is a heap summary report.',
+			inline: true,
+		}]);
+		ProfileEmbed.setColor(0xff0000);
+		ProfileEmbed.setDescription(null);
+		return [{ embeds: [ProfileEmbed] }];
+	}	
 	ProfileEmbed.setAuthor({ name: 'Spark Profile Analysis', iconURL: 'https://i.imgur.com/deE1oID.png', url: url });
 
 	if(!sampler.metadata.hasOwnProperty('serverConfigurations')) {
