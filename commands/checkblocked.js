@@ -1,3 +1,5 @@
+// Author: Cooleg <https://github.com/TrollsterCooleg>
+
 const fetch = (...args) => import('node-fetch').then(({ default: e }) => e(...args));
 const crypto = require('node:crypto');
 const { EmbedBuilder, ApplicationCommandOptionType } = require('discord.js');
@@ -93,15 +95,24 @@ module.exports = {
         let blockedString = blocked ? "is **BLOCKED**" : "is not blocked";
 
 		const user = message?.author ?? message?.member?.user ?? message?.user;	
+		// gets the server icon if it exists otherwise uses the default minecraft icon
+		let icon = await fetch(`https://eu.mc-api.net/v3/server/favicon/${ip}:${port}`);
+        if (!icon.ok) {
+            icon = "https://mcsrvstat.us/img/minecraft.png"
+        } else
+        {
+        icon = `https://eu.mc-api.net/v3/server/favicon/${ip}:${port}`;
+        }
+
 		const embed = new EmbedBuilder()
 			.setColor('#0099ff')
 			.setTitle(`${ip}`)
 			.setURL(`https://mcsrvstat.us/server/${ip}:${port}`)
 			.setDescription(`Server ${blockedString} by mojang.`)
-			.setThumbnail(`https://mcsrvstat.us/img/minecraft.png`)
+			.setThumbnail(icon)
 			.setTimestamp()
 			.setAuthor({name: `${user.username}#${user.discriminator}`, iconURL: user.displayAvatarURL({ dynamic: true })})
-			.setFooter({text: 'Blocked Server Checker', iconURL: 'https://mcsrvstat.us/img/minecraft.png'});
+			.setFooter({text: 'Blocked Server Checker', iconURL: icon});
 
 			message.reply({ embeds: [embed] });
 	}
