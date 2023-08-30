@@ -1,5 +1,6 @@
 // Author: Cooleg <https://github.com/TrollsterCooleg>
 
+// we needed to add a timeout since the api for some reason takes a bit to respond on non valid mc servers
 const fetch = (...args) =>
   Promise.race([
     import('node-fetch').then(({ default: e }) => e(...args)),
@@ -67,7 +68,7 @@ function testHash(ip) {
 
 module.exports = {
 	name: 'checkblocked',
-	description: 'check if a java server is mojang blocked.',
+	description: 'check if a java server is Mojang blocked.',
 	aliases: ['blocked'],
 	ephemeral: false,
 	args: true,
@@ -112,7 +113,7 @@ module.exports = {
 			.setColor('#0099ff')
 			.setTitle(`${ip}`)
 			.setURL(`https://mcsrvstat.us/server/${ip}:${port}`)
-			.setDescription(`Server ${blockedString} by mojang.`)
+			.setDescription(`Server ${blockedString} by Mojang.`)
 			.setThumbnail(icon)
 			.setTimestamp()
 			.setAuthor({name: `${user.username}#${user.discriminator}`, iconURL: user.displayAvatarURL({ dynamic: true })})
