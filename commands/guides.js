@@ -32,7 +32,7 @@ const guides = {
       **Please do not attempt to port forward unless you're fully aware of what it is, what it does, the dangers and how to properly do it. It'd be pretty embarrassing if you lost access to your VPS because you closed port 22**
       `),
   
-    "server.properties": "https://minecraft.fandom.com/wiki/Server.properties#Java_Edition_2",
+    "server.properties": "https://minecraft.wiki/w/Server.properties#Java_Edition_2",
   
     "purpur": new  EmbedBuilder()
       .setTitle("PurpurMc")
