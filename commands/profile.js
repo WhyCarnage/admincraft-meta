@@ -14,7 +14,8 @@ module.exports = {
 	async execute(message, args, client) {
 		try {
 			const profileresult = await analyzeProfile(message, client, args);
-			const profilemsg = await (message.type === 2 
+			if (message.type == 2) await message.deferReply({ ephemeral: true });
+			const profilemsg = await (message.type === 2
 				? message.editReply(profileresult ? profileresult[0] : 'Invalid Spark Profile URL.')
 				: message.reply(profileresult ? profileresult[0] : 'Invalid Spark Profile URL.'));
 

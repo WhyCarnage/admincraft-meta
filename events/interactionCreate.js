@@ -16,9 +16,6 @@ module.exports = async (client, interaction) => {
 	const cmdlog = args.join ? `${command.name} ${args.join(' ')}` : command.name;
 	client.logger.info(`${interaction.user.tag} issued slash command: /${cmdlog} in ${interaction.guild ? interaction.guild.name : interaction.user.username + `#${interaction.user.discriminator}'s DM`}`);
 
-	// Defer the reply to show the bot is processing the command
-	// await interaction.deferReply({ ephemeral: command.ephemeral });
-
 	// Execute the command and catch any errors
 	command.execute(interaction, args, client)
 		.catch(err => {

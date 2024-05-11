@@ -148,6 +148,7 @@ const guides = {
 		}
 	],   
 	async execute(message, args, client) {
+    if (message.type == 2) await message.deferReply({ ephemeral: true });
 		try {
       
       // in case of message command is being used instead of slash

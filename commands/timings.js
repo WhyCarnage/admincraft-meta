@@ -12,6 +12,7 @@ module.exports = {
 		'required': true,
 	}],
 	async execute(message, args, client) {
+		if (message.type == 2) await message.deferReply({ ephemeral: true });
 
 		try {
 			const timingsresult = await analyzeTimings(message, client, args);
