@@ -15,12 +15,12 @@ const guides = {
       .setDescription(`
       **What is port forwarding??**
       port forwarding is a technique used to allow external services/things access the device. For example port 22 is usually open to allow SSH connections from outside the computer. Without port 22 being opened you wouldn't be able to SSH into the device. Minecraft needs certain ports open for others to be able to join.
-      People will often be opening ports for various reasons such as maybe them wanting to host a website/web panel, wanting to create a database (MYSQL) and more.
+      People will often be opening ports for various reasons such as maybe them wanting to host a website/web panel, wanting to create a database (MySQL) and more.
   
-      **How do i port forward?**
+      **How do I port forward?**
       - **hosts** usually will do port forwarding for you by default but some will either open more on request or just give you a section to open ports so check your control panel!
   
-      - **Self hosted/your own device** You'd need to head to your router configuration homepage and open it. As everyone uses a different provider you'll need to search "How do i open ports on X provider" (example provider is verizon)
+      - **Self hosted/your own device** You'd need to head to your router configuration homepage and open it. As everyone uses a different provider you'll need to search "How do I open ports on X provider" (example provider is verizon)
   
       - **VPS** will usually have something on the dashboard manager that lets you control the network security things such as what ports are open. Just google how to open port on your VPS provider.
   
@@ -38,7 +38,7 @@ const guides = {
       .setTitle("PurpurMc")
       .setColor('Random')
       .setDescription(`
-      Purpur is a fork of paperMc (purpur contains pufferfish, tuinity and airplane patches) which best features is the fact it has more configuration/features or ways to change Gameplay\n
+      Purpur is a fork of paperMC (purpur contains Pufferfish, Tuinity and Airplane patches) which best features is the fact it has more configuration/features or ways to change Gameplay\n
       [Download](https://purpurmc.org/downloads)
       [Documentation](https://purpurmc.org/docs)
       [Github](https://github.com/PurpurMC/Purpur)
@@ -48,7 +48,7 @@ const guides = {
       .setTitle("Server panels")
       .setColor('Random')
       .setDescription(`
-      A game server management panel lets you manage your game server just through a website hosting your panel. Most hosting providers will have one but if you're self hosting or setting one up on a VPS you'll need to install one by yourself. Down below i'll list some choices but i encourage you to look into the subject yourself and choose one best for yourself
+      A game server management panel that lets you manage your game server just through a website hosting your panel. Most hosting providers will have one but if you're self hosting or setting one up on a VPS you'll need to install one by yourself. Down below I'll list some choices but i encourage you to look into the subject yourself and choose one best for yourself
       [pterodactyl](https://pterodactyl.io/) [linux]
       [PufferPanel](https://www.pufferpanel.com/) [linux]
       [Multicraft](https://www.multicraft.org/) [linux] [windows]
@@ -61,8 +61,8 @@ const guides = {
       .setTitle("Pufferfish")
       .setColor('Random')
       .setDescription(`
-      Pufferfish is a fork of paperMc (pufferfish contains airplane patches) which is useful for bigger server and promises a lot of performance tweaks. Check the github for a better explanation \n
-      [Download](https://ci.pufferfish.host/) (dont use pufferfish plus. its for their hosting users only)
+      Pufferfish is a fork of paperMC (Pufferfish contains Airplane patches) which is useful for bigger server and promises a lot of performance tweaks. Check the GitHub for a better explanation \n
+      [Download](https://ci.pufferfish.host/) (dont use Pufferfish Plus. It's for their hosting users only)
       [Documentation](https://docs.pufferfish.host/)
       [Github](https://github.com/pufferfish-gg/Pufferfish)
       `),
@@ -71,7 +71,7 @@ const guides = {
       .setTitle("PaperMC")
       .setColor('Random')
       .setDescription(`
-      Paper is a fork of Spigot (paper contains tuinity patches too!) which is recommended to use since it gives 2x the performance you get with spigot although it may have unwanted features as it also promises to fix a ton of bugs\n
+      Paper is a fork of Spigot (Paper contains Tuinity patches too!) which is recommended to use since it gives 2x the performance you get with Spigot although it may have unwanted features as it also promises to fix a ton of bugs\n
       [Download](https://papermc.io/downloads)
       [Documentation](https://docs.papermc.io/)
       [Github](https://github.com/PaperMC/Paper)
@@ -81,7 +81,7 @@ const guides = {
       .setTitle("SpigotMC")
       .setColor('Random')
       .setDescription(`
-      SpigotMc is a fork of bukkit which is the base of all the other forks you heard of such as paper. When a new version comes out you'll see this one being updated first\n
+      SpigotMc is a fork of Bukkit which is the base of all the other forks you heard of such as Paper. When a new version comes out you'll see this one being updated first\n
       [no downloads available, must compile using buildTools](https://www.spigotmc.org/wiki/buildtools/)
       [Documentation](https://www.spigotmc.org/wiki/spigot-configuration/)
       [github](https://github.com/spigotmc/)
@@ -108,13 +108,14 @@ const guides = {
     "java/JDK": new  EmbedBuilder()
       .setTitle("Use the right java!")
       .setColor('Random')
-      .setDescription(`Java and Minecraft go hand to hand, without java you wouldn't be able to run a Minecraft server so its important to have the right version installed.\n
+      .setDescription(`Java and Minecraft go hand to hand, without Java you wouldn't be able to run a Minecraft server so its important to have the right version installed.\n
       You should not use any of Oracle's OpenJDK below JDK 17  on your public server as it has serious licensing issues. Even if you're using above 17 its not recommended.  You should use [Adoptium](https://adoptium.net/temurin/releases) instead.\n
       **what JDK version do i need???**
          - 1.12.2 or below: Use JDK 8
          - 1.16.5: Use JDK 11
          - 1.17.1: Use JDK 16 or 17. Both work on 1.17
-         - 1.18.1 or higher: Use JDK 17 \n
+         - 1.18.1 or higher: Use JDK 17
+         - 1.20.5 or higher: Use JDK 21 \n
          __**Always use the recommended version of java rather than latest, most plugins/mods are coded against said version and other versions might not work as intended**__
       `),
   };
