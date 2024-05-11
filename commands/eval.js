@@ -23,7 +23,7 @@ module.exports = {
       if (text && text.constructor.name == 'Promise') text = await text;
       if (typeof text !== 'string')
         text = require('util').inspect(text, { depth: 1 });
-      const token = new RegExp(process.env.token);
+      const token = new RegExp(`^${process.env.token}$`);
       text = text
         .replace(/`/g, '`' + String.fromCharCode(8203))
         .replace(token, '[redacted]')
@@ -36,25 +36,19 @@ module.exports = {
         return message.reply('You are not the bot owner', { ephemeral: true });
       }
       // Evaluate (execute) our input
-      args = args.join(' ').replace(/process\.env\..*/, '');
 
-
-      // const evaled = eval(args.join(" "));
+      const evaled = eval(args.join(' '));
       // evaluates the code given. we wrap it in async so we can use await
-      const evaled = eval(`(async () => { ${args} })();`);
+      //const evaled = eval(`(async () => { await ${args} })();`);
       // Reply in the channel with our result
-      message.channel.send(`\`\`\`js\n${await clean(evaled)}\n\`\`\``);
+      await message.reply(`\`\`\`js\n${await clean(evaled)}\n\`\`\``);
     } catch (err) {
-      if (err.message.includes('Missing Permissions')) {
-        message.channel.send('Bot does not have permission to perform this action.');
+      // just tells the user what they asked for cant be done
+      if (err?.message?.includes('Missing Permissions')) {
+        message.reply('Bot does not have permission to perform this action.');
       }
       else {
-      // Reply in the channel with our error
-      message
-        .reply(`\`ERROR\` \`\`\`xl\n${await clean(err)}\n\`\`\``)
-        .catch(async () =>
-          user.send(`\`ERROR\` \`\`\`xl\n${await clean(err)}\n\`\`\``),
-        );
+      // Error handling will be handled by error handler
       client.error(err, message);
       }
     }

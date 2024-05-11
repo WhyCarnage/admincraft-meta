@@ -108,15 +108,21 @@ const guides = {
     "java/JDK": new  EmbedBuilder()
       .setTitle("Use the right java!")
       .setColor('Random')
-      .setDescription(`Java and Minecraft go hand to hand, without Java you wouldn't be able to run a Minecraft server so its important to have the right version installed.\n
+      .setDescription(`
+      Java and Minecraft go hand to hand, without Java you wouldn't be able to run a Minecraft server so its important to have the right version installed.\n
       You should not use any of Oracle's OpenJDK below JDK 17  on your public server as it has serious licensing issues. Even if you're using above 17 its not recommended.  You should use [Adoptium](https://adoptium.net/temurin/releases) instead.\n
       **what JDK version do i need???**
-         - 1.12.2 or below: Use JDK 8
-         - 1.16.5: Use JDK 11
-         - 1.17.1: Use JDK 16 or 17. Both work on 1.17
-         - 1.18.1 or higher: Use JDK 17
-         - 1.20.5 or higher: Use JDK 21 \n
-         __**Always use the recommended version of java rather than latest, most plugins/mods are coded against said version and other versions might not work as intended**__
+      \- 1.12.2 or below: Use JDK 8
+
+      \- 1.16.5: Use JDK 11
+
+      \- 1.17.1: Use JDK 16 or 17. Both work on 1.17
+
+      \- 1.18.1 or higher: Use JDK 17
+
+      \- 1.20.5 or higher: Use JDK 21
+         
+     \n\n__**Always use the recommended version of java rather than latest, most plugins/mods are coded against said version and other versions might not work as intended**__
       `),
   };
   C = []
