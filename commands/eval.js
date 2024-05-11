@@ -1,17 +1,17 @@
-const { ApplicationCommandOptionType } = require("discord.js");
+const { ApplicationCommandOptionType } = require('discord.js');
 
 module.exports = {
-  name: "eval",
-  description: "Evaluate JavaScript code.",
-  aliases: ["ev"],
+  name: 'eval',
+  description: 'Evaluate JavaScript code.',
+  aliases: ['ev'],
   args: true,
-  usage: "<code>",
+  usage: '<code>',
   ephemeral: true,
   options: [
     {
       type: ApplicationCommandOptionType.String,
-      name: "eval",
-      description: "eval code",
+      name: 'eval',
+      description: 'eval code',
       required: true,
     },
   ],
@@ -20,38 +20,43 @@ module.exports = {
 
     // cleaning function needed to prevent formatting from being a mess (backticks, mentions and the bots token)
     const clean = async (text) => {
-      if (text && text.constructor.name == "Promise") text = await text;
-      if (typeof text !== "string")
-        text = require("util").inspect(text, { depth: 1 });
-      token = new RegExp(process.env.token);
+      if (text && text.constructor.name == 'Promise') text = await text;
+      if (typeof text !== 'string')
+        text = require('util').inspect(text, { depth: 1 });
+      const token = new RegExp(process.env.token);
       text = text
-        .replace(/`/g, "`" + String.fromCharCode(8203))
-        .replace(token, "[redacted]")
-        .replace(/@/g, "@" + String.fromCharCode(8203));
+        .replace(/`/g, '`' + String.fromCharCode(8203))
+        .replace(token, '[redacted]')
+        .replace(/@/g, '@' + String.fromCharCode(8203));
 
       return text;
     };
     try {
-      if (process.env.BOT_OWNER != user.id)
-        return message.reply("You are not the bot owner", { ephemeral: true });
-
+      if (process.env.BOT_OWNER != user.id) {
+        return message.reply('You are not the bot owner', { ephemeral: true });
+      }
       // Evaluate (execute) our input
-      args = args.join(" ").replace(/process\.env\..*/, "");
+      args = args.join(' ').replace(/process\.env\..*/, '');
 
 
       // const evaled = eval(args.join(" "));
-	  // evaluates the code given. we wrap it in async so we can use await
+      // evaluates the code given. we wrap it in async so we can use await
       const evaled = eval(`(async () => { ${args} })();`);
       // Reply in the channel with our result
-      message.reply(`\`\`\`js\n${await clean(evaled)}\n\`\`\``);
+      message.channel.send(`\`\`\`js\n${await clean(evaled)}\n\`\`\``);
     } catch (err) {
+      if (err.message.includes('Missing Permissions')) {
+        message.channel.send('Bot does not have permission to perform this action.');
+      }
+      else {
       // Reply in the channel with our error
       message
         .reply(`\`ERROR\` \`\`\`xl\n${await clean(err)}\n\`\`\``)
         .catch(async () =>
-          user.send(`\`ERROR\` \`\`\`xl\n${await clean(err)}\n\`\`\``)
+          user.send(`\`ERROR\` \`\`\`xl\n${await clean(err)}\n\`\`\``),
         );
       client.error(err, message);
+      }
     }
   },
 };

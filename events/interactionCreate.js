@@ -12,36 +12,29 @@ module.exports = async (client, interaction) => {
 	// Set args to value of options
 	args.forEach(arg => args[args.indexOf(arg)] = arg.value);
 
-	// Defer and execute the command
-	try {
-		const cmdlog = args.join ? `${command.name} ${args.join(' ')}` : command.name;
-		client.logger.info(`${interaction.user.tag} issued slash command: /${cmdlog}, in ${interaction.guild ? interaction.guild.name : 'DMs'}`.replace(' ,', ','));
-		await interaction.deferReply({ ephemeral: command.ephemeral });
-		interaction.reply = interaction.editReply;
-		command.execute(interaction, args, client);
-		// if cmd takes too long to respond time it out
-		setTimeout(() => {
-			if (!interaction.replied) {
-			  interaction.editReply('Command timed out.');
-			}
-		  }, 4000);
-		} 
-	catch (err) {
-		const interactionFailed = new EmbedBuilder()
-			.setColor('Random')
-			.setTitle('INTERACTION FAILED')
-			.setAuthor({ name: interaction.user.tag, iconURL: interaction.user.avatarURL() })
-			.addFields([
-				{ name: '**Type:**', value: 'Slash' }, { name: '**Interaction:**', value: command.name },
-			]);
-		if (interaction.guild) {
-			interactionFailed.addFields([
-				{ name: '**Guild:**', value: interaction.guild.name },
-				{ name: '**Channel:**', value: interaction.channel.name },
-				{ name: '**Error:**', value: `\`\`\`\n${err}\n\`\`\`` },
-			]);
-		}
-		interaction.user.send({ embeds: [interactionFailed] }).catch(err => client.logger.warn(err));
-		client.logger.error(err.stack);
-	}
+	// Log the command
+	const cmdlog = args.join ? `${command.name} ${args.join(' ')}` : command.name;
+	client.logger.info(`${interaction.user.tag} issued slash command: /${cmdlog} in ${interaction.guild ? interaction.guild.name : interaction.user.username + `#${interaction.user.discriminator}'s DM`}`);
+
+	// Defer the reply to show the bot is processing the command
+	await interaction.deferReply({ ephemeral: command.ephemeral });
+
+	// Execute the command and catch any errors
+	command.execute(interaction, args, client)
+		.catch(err => {
+			const interactionFailed = new EmbedBuilder()
+				.setColor('#E0115F')
+				.setTitle('INTERACTION FAILED')
+				.setAuthor({ name: interaction.user.tag, iconURL: interaction.user.avatarURL() })
+				.addFields([
+					{ name: '**Type:**', value: 'Slash' },
+					{ name: '**Interaction:**', value: command.name },
+					{ name: '**Guild:**', value: interaction?.guild?.name ?? 'Direct Messages' },
+					{ name: '**Channel:**', value: interaction?.channel?.name ?? `${interaction.user.tag}` },
+					{ name: '**Error:**', value: `\`\`\`\n${err}\n\`\`\`` },
+				]);
+			interaction.editReply({ embeds: [interactionFailed] }).catch(err => client.logger.warn(err));
+			client.logger.error(`${err.stack} in ${interaction?.guild?.name ?? interaction.user.tag} (DMs)`);
+		});
+
 };

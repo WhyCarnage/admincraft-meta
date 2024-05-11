@@ -12,9 +12,11 @@ module.exports = {
 		'required': true,
 	}],
 	async execute(message, args, client) {
+
 		try {
 			const timingsresult = await analyzeTimings(message, client, args);
-			const timingsmsg = await message.reply(timingsresult ? timingsresult[0] : 'Invalid Timings URL.');
+			// send the timings result or  an error message if the result is invalid. Smartly handle the message type (slash or normal)
+			const timingsmsg = await (message.type === 2 ? message.editReply(timingsresult ? timingsresult[0] : 'Invalid Timings URL.') : message.reply(timingsresult ? timingsresult[0] : 'Invalid Timings URL.'));
 			if (!timingsresult) return;
 
 			// Get the issues from the timings result

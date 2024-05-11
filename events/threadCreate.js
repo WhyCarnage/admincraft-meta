@@ -21,7 +21,7 @@ module.exports = async (client, thread) => {
 
   // we need a delay here as sometimes the thread isn't available for the bot to send a message
   new Promise((resolve) => {
-    setTimeout(resolve, 1000);
+    setTimeout(resolve, 1500);
   })
     .then(async () => {
       const msg = await thread.send({ embeds: [embed] });

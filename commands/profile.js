@@ -14,7 +14,10 @@ module.exports = {
 	async execute(message, args, client) {
 		try {
 			const profileresult = await analyzeProfile(message, client, args);
-			const profilemsg = await message.reply(profileresult ? profileresult[0] : 'Invalid Profile URL.');
+			const profilemsg = await (message.type === 2 
+				? message.editReply(profileresult ? profileresult[0] : 'Invalid Spark Profile URL.')
+				: message.reply(profileresult ? profileresult[0] : 'Invalid Spark Profile URL.'));
+
 			if (!profileresult) return;
 
 			// Get the issues from the profile result

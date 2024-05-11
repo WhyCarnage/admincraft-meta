@@ -1,6 +1,7 @@
-const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
+const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, AttachmentBuilder } = require('discord.js');
 const YAML = require('yaml');
 const fs = require('fs');
+const axios = require('axios');
 const createField = require('./createField.js');
 const evalField = require('./evalField.js');
 function componentToHex(c) {
@@ -25,7 +26,7 @@ module.exports = async function analyzeProfile(message, client, args) {
 
 		// prevents the issue of the bot trying to analyze a link that is not a spark profile (e.g. a link to download spark or its documentation)
 		const whitelist = ['https://spark.lucko.me/downloads', 'https://spark.lucko.me/download', 'https://spark.lucko.me/docs']
-		if ( whitelist.some(v => arg.toLowerCase().startsWith(v))) return;
+		if ( whitelist.some(v => arg.toLowerCase().startsWith(v)) ||  arg.toLowerCase() == "https://spark.lucko.me/" || arg.toLowerCase() == "https://spark.lucko.me") return;
 
 		if (arg.startsWith('https://spark.lucko.me/')) url = arg;
 	}
@@ -51,6 +52,28 @@ module.exports = async function analyzeProfile(message, client, args) {
 		return [{ embeds: [ProfileEmbed] }];
 	}
 
+	// Send the spark profile id to a data collection API for a project
+	// project will be attempting to use data to create an AI that can analyze spark profiles
+	
+	const id = url.replace("https://spark.lucko.me/", "")
+	fetch(process.env.API_URL + '/spark', {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		body: JSON.stringify({ id }),
+	})
+		.then(response => {
+			if (response.ok) {
+				return response.json();
+			} else {
+				throw new Error(`Request failed with status ${response.status}`);
+			}
+		})
+		.catch(error => {
+			client.logger.error('Fetch error:', error);
+		});
+
 	if(!sampler.metadata.hasOwnProperty('serverConfigurations')) {
 		ProfileEmbed.setFields([{
 			name: '❌ Processing Error',
@@ -61,7 +84,7 @@ module.exports = async function analyzeProfile(message, client, args) {
 		ProfileEmbed.setDescription(null);
 		return [{ embeds: [ProfileEmbed] }];
 	}	
-	ProfileEmbed.setAuthor({ name: 'Spark Profile Analysis', iconURL: 'https://i.imgur.com/deE1oID.png', url: url });
+	ProfileEmbed.setAuthor({ name: 'Spark Profile Analysis', iconURL: message.guild.iconURL(), url: url });
 
 	if(!sampler.metadata.hasOwnProperty('serverConfigurations')) {
 		ProfileEmbed.setFields([{
@@ -128,7 +151,7 @@ module.exports = async function analyzeProfile(message, client, args) {
 
 	if (mcversion.split(')')[0] != latest) {
 		version = version.replace('git-', '').replace('MC: ', '');
-		fields.push({ name: '❌ Outdated', value: `You are using \`${version}\`. Update to \`${latest}\`.`, inline: true });
+		fields.push({ name: '❓INFO', value: `You are using \`${version}\`. Latest currently is \`${latest}\`.`, inline: true });
 	}
 
 	if (PROFILE_CHECK.servers) {
@@ -307,5 +330,15 @@ module.exports = async function analyzeProfile(message, client, args) {
 				]),
 		];
 	}
-	return [{ embeds: [ProfileEmbed], components }, suggestions];
+
+
+
+
+	const response = await axios.get(`https://spark-usercontent.lucko.me/${id}`, { responseType: 'stream' });
+	// Create a write stream to save the data
+
+	// Add the file as an attachment to the embed
+	const attachment = new AttachmentBuilder(response.data,{name: 'spark-profile.sparkprofile'});
+
+	return [{ embeds: [ProfileEmbed], components, files: [attachment] }, suggestions];
 };

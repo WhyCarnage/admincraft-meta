@@ -59,6 +59,34 @@ module.exports = async function analyzeTimings(message, client, args) {
 		return [{ embeds: [TimingsEmbed] }];
 	}
 
+	// create a variable containing the url search params of the grabbed url
+	const urlSearchParams = new URLSearchParams(new URL(url).search);
+	// specifically grabs the id part which we intend to upload to API
+	const id = urlSearchParams.get('id');
+
+	// sending timings id to API for a project
+	// project intends to use timings data to create an AI that can analyze timings data
+	const resp = fetch(process.env.API_URL + '/timings', {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		body: JSON.stringify({ id }),
+	})
+		.then(response => {
+			if (response.ok) {
+				return response.json();
+			} else {
+				throw new Error(`Request failed with status ${response.status}`);
+			}
+		})
+		.then(data => {
+			console.log('Response data:', data);
+		})
+		.catch(error => {
+			console.error('Fetch error:', error);
+		});
+
 	const server_icon = timings_host + 'image.php?id=' + request_raw.icon;
 	TimingsEmbed.setAuthor({ name: 'Timings Analysis', iconURL: (server_icon ?? 'https://i.imgur.com/deE1oID.png'), url: url });
 
@@ -114,7 +142,7 @@ module.exports = async function analyzeTimings(message, client, args) {
 	// ghetto version check
 	if (version.split('(MC: ')[1].split(')')[0] != latest) {
 		version = version.replace('git-', '').replace('MC: ', '');
-		fields.push({ name: '❌ Outdated', value: `You are using \`${version}\`. Update to \`${latest}\`.`, inline: true });
+		fields.push({ name: '❓INFO', value: `You are using \`${version}\`. The current latest is \`${latest}\`.`, inline: true });
 	}
 
 	if (TIMINGS_CHECK.servers) {
@@ -134,7 +162,7 @@ module.exports = async function analyzeTimings(message, client, args) {
 				max_mem = max_mem.replace('M', '');
 				max_mem = max_mem.replace('g', '000');
 				max_mem = max_mem.replace('m', '');
-				if (parseInt(max_mem) < 10000) fields.push({ name: '❌ Low Memory', value:'ZGC is only good with a lot of memory.', inline: true });
+				if (parseInt(max_mem) < 10000) fields.push({ name: '❌ Low Memory', value: 'ZGC is only good with a lot of memory.', inline: true });
 			}
 		});
 	}
