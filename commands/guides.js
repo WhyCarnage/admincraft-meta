@@ -166,6 +166,8 @@ const guides = {
       // if embed
       if (guide instanceof EmbedBuilder) {
         guide.setFooter({text: 'Requested by ' + user.tag, iconURL: user.displayAvatarURL({ dynamic: true }) }) 
+        if (message.type == 2)  return await message.editReply({ embeds: [guide] });
+        
        return message.reply({ embeds: [guide] });
       }
 		}
