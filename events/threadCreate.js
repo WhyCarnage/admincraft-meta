@@ -20,16 +20,25 @@ module.exports = async (client, thread) => {
     });
 
   // we need a delay here as sometimes the thread isn't available for the bot to send a message
-  new Promise((resolve) => {
-    setTimeout(resolve, 1500);
-  })
-    .then(async () => {
-      const msg = await thread.send({ embeds: [embed] });
-      await msg.pin();
-      thread.fetchStarterMessage().then(async (message) => {
+// we need a delay here as sometimes the thread isn't available for the bot to send a message
+new Promise((resolve) => {
+  setTimeout(resolve, 1500);
+})
+  .then(async () => {
+    const msg = await thread.send({ embeds: [embed] });
+    await msg.pin();
+    thread.fetchStarterMessage().then(async (message) => {
       await message.pin();
-      }).catch((err) => {
+    }).catch((err) => {
       client.logger.error(err);
+      setTimeout(async () => {
+        try {
+          const message = await thread.fetchStarterMessage();
+          await message.pin();
+        } catch (err) {
+          client.logger.error(err);
+        }
+      }, 60000); 
     });
   });
 };

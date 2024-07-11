@@ -77,12 +77,14 @@ module.exports = {
         if (message.channel.parent.name != "questions")  {
         await message
           .reply({ embeds: [solvedEmbed] })
-          .then(
-            async () =>
-              await postMessage.setArchived(
-                true,
-                "Marked as solved By " + user.tag
-              )
+          .then(() =>
+               setTimeout(async () => {
+                await postMessage.setArchived(
+                  true,
+                  "Marked as solved By " + user.tag
+                )
+  
+              }, 2000)
           );
               } else { 
                 await message

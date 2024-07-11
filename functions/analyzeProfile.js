@@ -4,6 +4,7 @@ const fs = require('fs');
 const axios = require('axios');
 const createField = require('./createField.js');
 const evalField = require('./evalField.js');
+const zlib = require('zlib');
 function componentToHex(c) {
 	const hex = c.toString(16);
 	return hex.length == 1 ? '0' + hex : hex;
@@ -73,7 +74,7 @@ module.exports = async function analyzeProfile(message, client, args) {
 		.catch(error => {
 			client.logger.error('Fetch error:', error);
 		});
-
+	
 	if(!sampler.metadata.hasOwnProperty('serverConfigurations')) {
 		ProfileEmbed.setFields([{
 			name: '❌ Processing Error',
@@ -86,17 +87,33 @@ module.exports = async function analyzeProfile(message, client, args) {
 	}	
 	ProfileEmbed.setAuthor({ name: 'Spark Profile Analysis', iconURL: message.guild.iconURL(), url: url });
 
-	if(!sampler.metadata.hasOwnProperty('serverConfigurations')) {
-		ProfileEmbed.setFields([{
-			name: '❌ Processing Error',
-			value: 'The bot cannot process this Spark profile. This is a heap summary report.',
-			inline: true,
-		}]);
-		ProfileEmbed.setColor(0xff0000);
-		ProfileEmbed.setDescription(null);
-		return [{ embeds: [ProfileEmbed] }];
-	}
+	
+	// Create a write stream to save the data
+	console.time('Downloading Spark profile');
+	let attachment = await axios.get(`https://spark-usercontent.lucko.me/${id}`, { responseType: 'stream' })
+    .then(async response => {
+        // Use an array to collect the chunks of data
+        const chunks = [];
 
+        for await (const chunk of response.data) {
+            chunks.push(chunk);
+        }
+
+        const buffer = Buffer.concat(chunks);
+
+        if (buffer.length > 7 * 1024 * 1024) {
+            const compressedData = zlib.gzipSync(buffer, { level: 1 });
+            let attachment = new AttachmentBuilder(compressedData, { name: `${id}.sparkprofile.gz` });
+            return attachment;
+        } else {
+            let attachment = new AttachmentBuilder(buffer, { name: `${id}.sparkprofile` });
+            return attachment;
+        }
+    })
+    .catch(error => {
+        console.error('Error downloading or compressing Spark profile:', error);
+    });
+		console.timeEnd('Downloading Spark profile');
 	const platform = sampler.metadata.platform.name;
 
 	let version = sampler.metadata.platform.version;
@@ -146,7 +163,7 @@ module.exports = async function analyzeProfile(message, client, args) {
 		}]);
 		ProfileEmbed.setColor(0xff0000);
 		ProfileEmbed.setDescription(null);
-		return [{ embeds: [ProfileEmbed] }];
+		return [{ embeds: [ProfileEmbed], files: [attachment] }];
 	}
 
 	if (mcversion.split(')')[0] != latest) {
@@ -331,14 +348,6 @@ module.exports = async function analyzeProfile(message, client, args) {
 		];
 	}
 
-
-
-
-	const response = await axios.get(`https://spark-usercontent.lucko.me/${id}`, { responseType: 'stream' });
-	// Create a write stream to save the data
-
-	// Add the file as an attachment to the embed
-	const attachment = new AttachmentBuilder(response.data,{name: 'spark-profile.sparkprofile'});
 
 	return [{ embeds: [ProfileEmbed], components, files: [attachment] }, suggestions];
 };
