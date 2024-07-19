@@ -3,7 +3,7 @@ name: Bug report
 about: Report bugs to get fixed
 title: "[Bug] Bug_name"
 labels: bug
-assignees: Darkcarnage23
+assignees: WhyCarnage
 
 ---
 
