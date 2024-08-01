@@ -378,7 +378,7 @@ module.exports = async (client, message) => {
                       .setStyle(ButtonStyle.Secondary),
                     new ButtonBuilder()
                       .setURL(
-                        "https://github.com/Darkcarnage23/admincraft-meta"
+                        process.env.GITHUB_URL
                       )
                       .setLabel("source")
                       .setStyle(ButtonStyle.Link),

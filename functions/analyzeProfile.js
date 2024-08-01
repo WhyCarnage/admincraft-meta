@@ -10,6 +10,13 @@ function componentToHex(c) {
 	return hex.length == 1 ? '0' + hex : hex;
 }
 
+// Platforms we support (also works for paper forks)
+const supportedPlatforms = [
+	'paper',
+	'bukkit',
+	
+];
+
 module.exports = async function analyzeProfile(message, client, args) {
 	const author = message.author ?? message.user;
 	const ProfileEmbed = new EmbedBuilder()
@@ -116,10 +123,6 @@ module.exports = async function analyzeProfile(message, client, args) {
 		console.timeEnd('Downloading Spark profile');
 	const platform = sampler.metadata.platform.name;
 
-	let version = sampler.metadata.platform.version;
-	client.logger.info(version);
-
-	if (version.endsWith('(MC: 1.17)')) version = version.replace('(MC: 1.17)', '(MC: 1.17.0)');
 
 	let server_properties, bukkit, spigot, paper, purpur;
 
@@ -153,9 +156,10 @@ module.exports = async function analyzeProfile(message, client, args) {
 	const json = await req.json();
 	const latest = json.versions[json.versions.length - 1];
 
-	// ghetto version check
-	const mcversion = version.split('(MC: ')[1];
-	if(mcversion == undefined) {
+	// When spark has the mc version easily accessible and doesnt require us to split it from elsewhere
+	const mcversion = sampler.metadata.platform.minecraftVersion;
+	// lowercase the platform as supported platforms are stored as lowercase
+	if (platform != undefined && supportedPlatforms.includes(platform.toLowerCase()) == false) {
 		ProfileEmbed.setFields([{
 			name: '❌ Processing Error',
 			value: 'The bot cannot process this Spark profile. It appears that the platform is not supported for analysis. Platform: ' + platform,
@@ -172,8 +176,11 @@ module.exports = async function analyzeProfile(message, client, args) {
 	}
 
 	if (PROFILE_CHECK.servers) {
+		// warns users about bad Server software
+		// brand is name of the server software. Eg. "Purpur", "Pufferfish"
+		const brand = sampler.metadata.platform.brand;
 		PROFILE_CHECK.servers.forEach(server => {
-			if (version.includes(server.name)) fields.push(createField(server));
+			if (brand.includes(server.name)) fields.push(createField(server));
 		});
 	}
 
@@ -324,7 +331,7 @@ module.exports = async function analyzeProfile(message, client, args) {
 						.setEmoji({ name: '➡️' })
 						.setStyle(ButtonStyle.Secondary),
 					new ButtonBuilder()
-						.setURL('https://github.com/Darkcarnage23/admincraft-meta')
+						.setURL(process.env.GITHUB_URL)
 						.setLabel('source')
 						.setStyle(ButtonStyle.Link),
 				]),
@@ -341,7 +348,7 @@ module.exports = async function analyzeProfile(message, client, args) {
 						.setLabel('Dismiss and force analysis')
 						.setStyle(ButtonStyle.Secondary),
 					new ButtonBuilder()
-						.setURL('https://github.com/Darkcarnage23/admincraft-meta')
+						.setURL(process.env.GITHUB_URL)
 						.setLabel('source')
 						.setStyle(ButtonStyle.Link),
 				]),

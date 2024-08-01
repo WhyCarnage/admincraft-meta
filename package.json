@@ -4,7 +4,7 @@
   "description": "Discord Bot for Admincraft, forked from birdflop with improvements made.",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Darkcarnage23/admincraft-meta.git"
+    "url": "git+https://github.com/WhyCarnage/admincraft-meta.git"
   },
   "engines": {
     "node": ">=18.0.0"

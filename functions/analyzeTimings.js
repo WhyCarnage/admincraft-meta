@@ -321,7 +321,7 @@ module.exports = async function analyzeTimings(message, client, args) {
 						.setEmoji({ name: '➡️' })
 						.setStyle(ButtonStyle.Secondary),
 					new ButtonBuilder()
-						.setURL('https://github.com/Darkcarnage23/admincraft-meta')
+						.setURL(process.env.GITHUB_URL)
 						.setLabel('source')
 						.setStyle(ButtonStyle.Link),
 				]),
@@ -338,7 +338,7 @@ module.exports = async function analyzeTimings(message, client, args) {
 						.setLabel('Dismiss and force analysis')
 						.setStyle(ButtonStyle.Secondary),
 					new ButtonBuilder()
-						.setURL('https://github.com/Darkcarnage23/admincraft-meta')
+						.setURL(process.env.GITHUB_URL)
 						.setLabel('source')
 						.setStyle(ButtonStyle.Link),
 				]),
