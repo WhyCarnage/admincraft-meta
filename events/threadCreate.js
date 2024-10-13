@@ -2,7 +2,7 @@ const { EmbedBuilder } = require("discord.js");
 module.exports = async (client, thread) => {
   // fetches the parent channel of the thread
   parent = thread.guild.channels.cache.get(thread.parentId);
-  if (parent.name != "questions") return; // stops if the parent channel is not a question channel
+  if (parent.name != "questions" && parent.name != "marketplace" && parent.name != "resources") return; // stops if the parent channel is not a question channel
   const owner =
     (await client.users.cache.get(thread.ownerId)) ||
     (await client.users.fetch(thread.ownerId));
