@@ -2,7 +2,6 @@ const { PermissionFlagsBits, EmbedBuilder } = require("discord.js");
 module.exports = {
   name: "close",
   description: "Closes the post and marks it as solved.",
-  ephemeral: true,
   args: false,
   aliases: ["solved", "s", "answered"],
   cooldown: 10,
@@ -74,7 +73,7 @@ module.exports = {
       }
       // checks if the post is archived or not. if it it isn't, it will reply with the embed and archive the post
       if (!message.channel.archived) {
-        if (message.channel.parent.name != "questions")  {
+        if (message.channel.parent.name == "questions")  {
         await message
           .reply({ embeds: [solvedEmbed] })
           .then(() =>
@@ -84,7 +83,7 @@ module.exports = {
                   "Marked as solved By " + user.tag
                 )
   
-              }, 2000)
+              }, 1000)
           );
               } else { 
                 await message
