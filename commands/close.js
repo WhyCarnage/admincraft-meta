@@ -6,6 +6,9 @@ module.exports = {
   aliases: ["solved", "s", "answered"],
   cooldown: 10,
   async execute(message, args, client) {
+    // if message is a slash command we want to defer just in case
+    if (message.type == 2) await message.deferReply();
+
     const user = message?.author ?? message?.member?.user ?? message?.user;
 
     // prevents the command from being ran in non thread/forum post
@@ -71,32 +74,41 @@ module.exports = {
           "Marked as solved By " + user.username + "#" + user.discriminator
         );
       }
+
+      // function to send message based on if its slash or message
+      async function Reply(type,embed) {
+        if (type == 2) {
+          await message.editReply({ embeds: [embed] });
+        } else {
+          await message.reply({ embeds: [embed] });
+        }
+        
+      }
+
       // checks if the post is archived or not. if it it isn't, it will reply with the embed and archive the post
       if (!message.channel.archived) {
-        if (message.channel.parent.name == "questions")  {
-        await message
-          .reply({ embeds: [solvedEmbed] })
-          .then(() =>
-               setTimeout(async () => {
+        if (message.channel.parent.name == "questions") {          
+          await Reply(message.type,solvedEmbed)
+            .then(() =>
+              setTimeout(async () => {
                 await postMessage.setArchived(
                   true,
                   "Marked as solved By " + user.tag
                 )
-  
+
               }, 1000)
-          );
-              } else { 
-                await message
-                .reply({ embeds: [closeEmbed] })
-                .then(
-                  async () =>
-                    await postMessage.setArchived(
-                      true,
-                      `${user.tag}#${user.discriminator} closed the post`
-                    )
-                );
-      
-              }
+            );
+        } else {
+          await Reply(message.type,closeEmbed)
+            .then(
+              async () =>
+                await postMessage.setArchived(
+                  true,
+                  `${user.tag}#${user.discriminator} closed the post`
+                )
+            );
+
+        }
       }
     } catch (err) {
       client.error(err, message);
